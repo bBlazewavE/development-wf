@@ -1,5 +1,8 @@
 # === AI Dev Workflow ===
 
+# Don't error on unmatched globs (fixes "no matches found" with ? * [] in commands)
+setopt NO_NOMATCH
+
 # Default editor
 export EDITOR='nvim'
 export VISUAL='nvim'

@@ -79,10 +79,10 @@ AI task orchestrator cloned to `~/.local/share/ralph`, symlinked to `~/.local/bi
 
 Pi is the main AI pane in the `dev` session. It supports 15+ model providers — use Claude for complex tasks and switch to cheaper models for quick questions to optimize token spend. Claude Code is installed as a provider inside Pi.
 
-After install, set your API key:
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-```
+After install, set up authentication. You can use either:
+- **Claude Code OAuth token:** `claude setup-token` then `export ANTHROPIC_API_KEY=<token>`
+- **Console API key:** Get one from console.anthropic.com
+- **Other providers:** Set `GOOGLE_API_KEY`, `OPENAI_API_KEY`, etc.
 
 ## Shortcuts & Aliases
 
