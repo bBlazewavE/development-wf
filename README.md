@@ -75,16 +75,14 @@ A marker-delimited block is appended to `~/.zshrc` (your existing config is pres
 
 AI task orchestrator cloned to `~/.local/share/ralph`, symlinked to `~/.local/bin/ralph`.
 
-### Claude Code
+### Pi (primary AI interface)
 
-Anthropic's CLI AI assistant. After install, set your API key:
+Pi is the main AI pane in the `dev` session. It supports 15+ model providers — use Claude for complex tasks and switch to cheaper models for quick questions to optimize token spend. Claude Code is installed as a provider inside Pi.
+
+After install, set your API key:
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
-
-### Pi
-
-AI coding agent by mariozechner. Run with `pi` after install.
 
 ## Shortcuts & Aliases
 
