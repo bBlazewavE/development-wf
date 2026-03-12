@@ -184,3 +184,36 @@ mcp-status:
 update:
     nix flake update
     npm update -g
+
+# ── Orchestrator ─────────────────────────────────────────────────────────────
+
+# Install orchestrator dependencies and create state dirs
+orch-setup:
+    pip3 install --user anthropic pyyaml
+    mkdir -p ~/.local/share/shellsmith/orchestrator/tasks
+    mkdir -p ~/.local/share/shellsmith/orchestrator/logs
+    @echo "orchestrator: setup complete"
+
+# Submit a task for async planning
+orchestrate +TASK:
+    python3 {{ root }}/orchestrator/orch.py run "{{ TASK }}"
+
+# List all orchestrator tasks
+orch-status:
+    python3 {{ root }}/orchestrator/orch.py status
+
+# Show orchestrator task details
+orch-show ID:
+    python3 {{ root }}/orchestrator/orch.py show {{ ID }}
+
+# Approve a planned task for execution
+orch-approve ID:
+    python3 {{ root }}/orchestrator/orch.py approve {{ ID }}
+
+# Cancel an orchestrator task
+orch-cancel ID:
+    python3 {{ root }}/orchestrator/orch.py cancel {{ ID }}
+
+# Show orchestrator task logs
+orch-logs ID:
+    python3 {{ root }}/orchestrator/orch.py logs {{ ID }}

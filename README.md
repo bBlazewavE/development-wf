@@ -25,12 +25,13 @@ nix develop --command just setup
 
 ```
 flake.nix              ← declares all packages (Nix devShell)
-justfile               ← recipes: setup, link, zshrc, npm, mcp, status, clean, update
+justfile               ← recipes: setup, link, zshrc, npm, mcp, orch-*, status, clean, update
 bootstrap.sh           ← one-time script (Xcode CLI + Nix)
 shell/zshrc_block.zsh  ← shell config injected into ~/.zshrc
 nvim/                  ← Neovim config (symlinked to ~/.config/nvim)
 tmux/                  ← tmux config (symlinked to ~/.tmux.conf)
 mcp/                   ← MCP server templates (GitHub, Jira, Slack, Linear, Notion)
+orchestrator/          ← async plan-and-execute pipeline (orch CLI)
 ```
 
 **Install flow:** `bootstrap.sh` → `nix develop` → `just setup`
@@ -68,6 +69,13 @@ mcp/                   ← MCP server templates (GitHub, Jira, Slack, Linear, No
 | `just status` | Shows current state (symlinks, packages, MCP, shell block) |
 | `just clean` | Removes symlinks and zshrc block |
 | `just update` | Runs `nix flake update` and `npm update -g` |
+| `just orch-setup` | Installs orchestrator Python dependencies and creates state dirs |
+| `just orchestrate <task>` | Submits a task for async planning |
+| `just orch-status` | Lists all orchestrator tasks |
+| `just orch-show <id>` | Shows task details, plan, and result |
+| `just orch-approve <id>` | Approves a plan and starts execution |
+| `just orch-cancel <id>` | Cancels a task and kills its worker |
+| `just orch-logs <id>` | Prints task log files |
 
 All recipes are idempotent — safe to run repeatedly.
 
@@ -137,6 +145,25 @@ GitHub is zero-config if you've already run `gh auth login` — it uses the GitH
 
 For token-based services (Jira, Slack, etc.), the setup will prompt for credentials or read them from environment variables. Templates are in `mcp/` — add your own by dropping a JSON file there.
 
+### Orchestrator (async plan-and-execute)
+
+A non-blocking pipeline that dispatches tasks to a thinking model for planning, then to a smaller model for execution. All API calls run in background processes — the CLI returns immediately.
+
+**State machine:** `planning` → `planned` → `executing` → `completed` (or `cancelled` / `failed`)
+
+**Usage:**
+```bash
+just orch-setup                           # one-time: install deps
+orch run "Add retry logic to api.py"      # submit task → plans in background
+orch status                               # check progress
+orch show <id>                            # view the plan
+orch approve <id>                         # start execution
+orch show <id>                            # view the result
+orch logs <id>                            # view worker output
+```
+
+Models default to Claude Sonnet (planner) and Claude Haiku (executor), overridable via `ORCH_PLANNER_MODEL` / `ORCH_EXECUTOR_MODEL` env vars. Pipeline config lives in `orchestrator/pipelines/plan-execute.yaml`.
+
 ### Pi (primary AI interface)
 
 Pi is the main AI pane in the `dev` session. It supports 15+ model providers — use Claude for complex tasks and switch to cheaper models for quick questions to optimize token spend. Claude Code is installed as a provider inside Pi.
@@ -158,6 +185,7 @@ After install, set up authentication. You can use either:
 | `lg` | `lazygit` |
 | `y` | `yazi` |
 | `cc` | `claude` |
+| `orch` | `python3 ~/.shellsmith/orchestrator/orch.py` |
 
 ### tmux
 

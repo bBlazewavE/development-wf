@@ -26,6 +26,7 @@ alias lg='lazygit'
 alias y='yazi'
 alias v='nvim'
 alias cc='claude'
+alias orch='python3 ~/.shellsmith/orchestrator/orch.py'
 
 # Dev session: Neovim on top, Pi on bottom
 dev() {

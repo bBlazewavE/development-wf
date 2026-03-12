@@ -28,6 +28,7 @@
             pkgs.gh
             pkgs.nodejs_22
             pkgs.just
+            pkgs.python3
 
             # AI tools (from community flake)
             claude-code

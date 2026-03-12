@@ -1,0 +1,19 @@
+name: plan-execute
+description: Plan with a strong model, execute with a fast model
+steps:
+  - name: plan
+    model: claude-sonnet-4-5-20250929
+    max_tokens: 4096
+    system_prompt: |
+      You are a senior software architect. Given a task, create a clear,
+      actionable implementation plan with specific steps. Include file paths
+      and function names where possible.
+    requires_approval: false
+  - name: execute
+    model: claude-haiku-4-5-20251001
+    max_tokens: 8192
+    system_prompt: |
+      You are a precise code implementer. Given a task and an approved plan,
+      implement each step. Output code changes as clearly labeled file blocks.
+    input_from: plan
+    requires_approval: true
