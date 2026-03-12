@@ -10,7 +10,7 @@ A complete AI-powered development environment for macOS. Declarative packages vi
 git clone https://github.com/bBlazewavE/shellsmith.git ~/.shellsmith
 cd ~/.shellsmith
 ./bootstrap.sh                      # installs Xcode CLI tools + Nix
-nix develop --command just setup    # links configs, injects zshrc, installs Ralph + npm extras
+nix develop --command just setup    # links configs, injects zshrc, installs npm extras
 source ~/.zshrc
 ```
 
@@ -25,7 +25,7 @@ nix develop --command just setup
 
 ```
 flake.nix              ← declares all packages (Nix devShell)
-justfile               ← recipes: setup, link, zshrc, ralph, npm, status, clean, update
+justfile               ← recipes: setup, link, zshrc, npm, status, clean, update
 bootstrap.sh           ← one-time script (Xcode CLI + Nix)
 shell/zshrc_block.zsh  ← shell config injected into ~/.zshrc
 nvim/                  ← Neovim config (symlinked to ~/.config/nvim)
@@ -42,7 +42,6 @@ tmux/                  ← tmux config (symlinked to ~/.tmux.conf)
 | **tmux** | Terminal multiplexer for multi-pane sessions | Nix |
 | **Claude Code** | AI coding assistant (CLI) | Nix (community flake) |
 | **Pi** | AI coding agent | npm |
-| **Ralph** | AI task orchestrator | git clone |
 | **lazygit** | Terminal UI for git | Nix |
 | **fzf** | Fuzzy finder (files, history, dirs) | Nix |
 | **fd** | Fast file finder (used by fzf/Telescope) | Nix |
@@ -57,10 +56,9 @@ tmux/                  ← tmux config (symlinked to ~/.tmux.conf)
 
 | Recipe | What it does |
 |--------|-------------|
-| `just setup` | Runs link, zshrc, ralph, npm (default) |
+| `just setup` | Runs link, zshrc, npm (default) |
 | `just link` | Symlinks nvim/ and tmux.conf (with backup) |
 | `just zshrc` | Injects shell block into ~/.zshrc between markers |
-| `just ralph` | Clones Ralph, symlinks to ~/.local/bin/ralph |
 | `just npm` | Installs npm globals not covered by Nix |
 | `just status` | Shows current state (symlinks, packages, shell block) |
 | `just clean` | Removes symlinks and zshrc block |
@@ -101,10 +99,6 @@ A marker-delimited block is injected into `~/.zshrc` (your existing config is pr
 - fzf shell integration
 - Starship prompt
 - Aliases and the `dev` function
-
-### Ralph
-
-AI task orchestrator cloned to `~/.local/share/ralph`, symlinked to `~/.local/bin/ralph`.
 
 ### Pi (primary AI interface)
 
@@ -182,9 +176,6 @@ This removes symlinks and the zshrc block. To fully clean up:
 ```bash
 # Remove installed data
 rm -rf ~/.local/share/nvim/lazy    # Neovim plugins
-rm -rf ~/.local/share/ralph        # Ralph
-rm ~/.local/bin/ralph              # Ralph symlink
-
 # Remove the repo
 rm -rf ~/.shellsmith
 ```
@@ -226,13 +217,6 @@ export TERM=xterm-256color
 which claude               # Check PATH
 just status                # Check overall state
 source ~/.zshrc            # Reload shell
-```
-
-### Ralph not found
-```bash
-ls -la ~/.local/bin/ralph               # Check symlink
-ls ~/.local/share/ralph/ralph.sh        # Check source
-echo $PATH | tr ':' '\n' | grep local  # Verify PATH includes ~/.local/bin
 ```
 
 ## Troubleshooting

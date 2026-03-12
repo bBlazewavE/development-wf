@@ -7,7 +7,7 @@ root := justfile_directory()
 timestamp := `date +%Y%m%d-%H%M%S`
 
 # Default recipe: run full setup
-setup: link zshrc ralph npm
+setup: link zshrc npm
     @echo ""
     @echo "shellsmith: setup complete"
     @echo "  Run: source ~/.zshrc"
@@ -76,29 +76,6 @@ zshrc:
         echo "  appended shellsmith block to ~/.zshrc"
     fi
 
-# Clone Ralph and symlink binary
-ralph:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    RALPH_DIR="$HOME/.local/share/ralph"
-    RALPH_BIN="$HOME/.local/bin/ralph"
-    mkdir -p "$HOME/.local/bin"
-
-    if [[ -d "$RALPH_DIR" ]]; then
-        echo "  ok: ralph already cloned"
-    else
-        git clone https://github.com/cyanheads/ralph.git "$RALPH_DIR"
-        echo "  cloned: ralph"
-    fi
-
-    if [[ -L "$RALPH_BIN" ]] && [[ "$(readlink "$RALPH_BIN")" == "$RALPH_DIR/ralph.sh" ]]; then
-        echo "  ok: ralph symlink"
-    else
-        ln -sf "$RALPH_DIR/ralph.sh" "$RALPH_BIN"
-        chmod +x "$RALPH_DIR/ralph.sh"
-        echo "  linked: ralph → $RALPH_BIN"
-    fi
-
 # Install npm globals not covered by Nix
 npm:
     #!/usr/bin/env bash
@@ -143,21 +120,13 @@ status:
 
     echo ""
     echo "=== Key binaries ==="
-    for cmd in nvim tmux fzf claude node ralph just; do
+    for cmd in nvim tmux fzf claude node just; do
         if loc="$(command -v "$cmd" 2>/dev/null)"; then
             echo "  ok: $cmd → $loc"
         else
             echo "  MISSING: $cmd"
         fi
     done
-
-    echo ""
-    echo "=== Ralph ==="
-    if [[ -d "$HOME/.local/share/ralph" ]]; then
-        echo "  ok: ralph cloned"
-    else
-        echo "  MISSING: ralph not cloned"
-    fi
 
 # Remove symlinks and zshrc block
 clean:
