@@ -92,7 +92,7 @@ AI coding agent by mariozechner. Run with `pi` after install.
 
 | Command | Action |
 |---------|--------|
-| `dev` | Launch tmux session with Neovim + Claude + lazygit + shell |
+| `dev` | Launch tmux session: Neovim (file picker) + shell |
 | `dev myproject` | Same, with custom session name |
 | `v` | `nvim` |
 | `lg` | `lazygit` |

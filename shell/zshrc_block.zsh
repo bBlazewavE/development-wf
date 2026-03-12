@@ -19,14 +19,11 @@ alias y='yazi'
 alias v='nvim'
 alias cc='claude'
 
-# Dev session: opens tmux with Neovim + Claude Code + lazygit + shell
+# Dev session: Neovim on top, shell below
 dev() {
   local session="${1:-dev}"
-  tmux new-session -d -s "$session" -n code 'nvim'
-  tmux split-window -h -t "$session" 'claude'
-  tmux split-window -v -t "$session"
+  tmux new-session -d -s "$session" -n code 'nvim +Telescope\ find_files'
+  tmux split-window -v -t "$session" -l 30%
   tmux select-pane -t "$session:1.1"
-  tmux split-window -v -t "$session" 'lazygit'
-  tmux select-pane -t "$session:1.2"
   tmux attach -t "$session"
 }
