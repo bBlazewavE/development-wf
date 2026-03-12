@@ -183,7 +183,6 @@ mcp-status:
 # Update flake and npm globals
 update:
     nix flake update
-    npm update -g
 
 # ── Orchestrator ─────────────────────────────────────────────────────────────
 
